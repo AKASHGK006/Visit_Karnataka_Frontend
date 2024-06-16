@@ -1,2 +1,2 @@
-const baseUrl = `https://visit-karnataka.onrender.com`;
+const baseUrl = `https://visit-karnataka-server.onrender.com`;
 export default baseUrl;
