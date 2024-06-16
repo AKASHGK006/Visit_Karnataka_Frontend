@@ -1,2 +1,2 @@
-const baseUrl = `https://visit-karnataka-server.vercel.app`;
+const baseUrl = `https://visit-karnataka.onrender.com`;
 export default baseUrl;
