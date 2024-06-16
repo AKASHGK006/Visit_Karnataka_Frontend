@@ -3,31 +3,27 @@ import bgImage from '../../assets/bg2.png'; // Adjust the relative path as neede
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Footer from './Footer';
-import baseUrl from '../../basrUrl'; // Make sure this is correctly imported and adjusted
+import baseUrl from '../../basrUrl'
 
 const Home = () => {
   const [places, setPlaces] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Clear session storage on component mount (if needed)
     sessionStorage.clear();
-
-    // Fetch places data from API
     axios.get(`${baseUrl}/places`)
       .then(response => {
         setPlaces(response.data);
       })
       .catch(error => {
         console.error('Error fetching places:', error);
-        // Handle error if needed (e.g., set default places state)
-        setPlaces([]);
       });
-  }, []); // Empty dependency array ensures useEffect runs only once on component mount
+  }, []);
 
   const goToDetailsPage = (placeId) => {
     navigate(`/details/${placeId}`);
   };
+
 
   return (
     <div>
@@ -72,18 +68,14 @@ const Home = () => {
       <div className="px-4">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center">
-            {places.length > 0 ? (
-              places.map(place => (
-                <div key={place._id} className="max-w-xs overflow-hidden rounded-lg m-4 transform transition duration-300 hover:scale-105" onClick={() => goToDetailsPage(place._id)}>
-                  <img src={`${baseUrl}/${place.image}`} alt="Card Image" className="w-72 h-72 object-cover rounded-lg" />
-                  <div className="my-5"></div>
-                  <figcaption className="font-bold mt-2 text-center font-raleway">{place.placetitle}</figcaption>
-                  <p className="font-light text-center">{place.placelocation}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-500">Loading...</p>
-            )}
+            {places.map(place => (
+              <div key={place._id} className="max-w-xs overflow-hidden rounded-lg m-4 transform transition duration-300 hover:scale-105" onClick={() => goToDetailsPage(place._id)}>
+                <img src={`${baseUrl}/${place.image}`} alt="Card Image" className="w-72 h-72 object-cover rounded-lg" />
+                <div className="my-5"></div>
+                <figcaption className="font-bold mt-2 text-center font-raleway">{place.placetitle}</figcaption>
+                <p className="font-light text-center">{place.placelocation}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
