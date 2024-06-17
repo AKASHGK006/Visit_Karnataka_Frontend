@@ -60,6 +60,7 @@ const Details = () => {
   }
 
   return (
+    <div>
     <div className="container mx-auto px-4 pt-20">
       <h1 className="mb-3 text-4xl font-bold">{place.placetitle}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -160,7 +161,8 @@ const Details = () => {
           </div>
         </div>
       </div>
-      <Footer/>
+    </div>
+    <Footer/>
     </div>
   );
 };

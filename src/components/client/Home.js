@@ -1,29 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import bgImage from '../../assets/bg2.png'; // Adjust the relative path as needed
 import axios from 'axios';
-import { Link,useNavigate } from 'react-router-dom';
-import baseUrl from '../../basrUrl';
+import { Link, useNavigate } from 'react-router-dom';
+import baseUrl from '../../basrUrl'; // Corrected the import path assuming 'baseUrl' is correct
 import Footer from './Footer';
 
 const Home = () => {
   const navigate = useNavigate();
   const [places, setPlaces] = useState([]);
+  const [loading, setLoading] = useState(true); // State for loading indicator
 
   useEffect(() => {
     sessionStorage.clear();
     axios.get(`${baseUrl}/places`)
       .then(response => {
         setPlaces(response.data);
+        setLoading(false); // Set loading to false after data fetch
       })
       .catch(error => {
         console.error('Error fetching places:', error);
+        setLoading(false); // Set loading to false on error as well
       });
   }, []);
 
   const goToDetailsPage = (placeId) => {
     navigate(`/details/${placeId}`);
   };
-
 
   return (
     <div>
@@ -64,18 +66,25 @@ const Home = () => {
 
       <div className="px-4">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center">
-            {places.map(place => (
-              <div key={place._id} className="max-w-xs overflow-hidden rounded-lg m-4 transform transition duration-300 hover:scale-105" onClick={() => goToDetailsPage(place._id)}>
-                <img src={`data:image/jpeg;base64,${place.image}`} alt="Card Image" className="w-72 h-72 object-cover rounded-lg" />
-                <div className="my-5"></div>
-                <figcaption className="font-bold mt-2 text-center font-raleway">{place.placetitle}</figcaption>
-                <p className="font-light text-center">{place.placelocation}</p>
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex items-center justify-center h-screen">
+              <p className="text-xl">Loading...</p>
+            </div>
+          ) : (
+            <div className="flex flex-wrap justify-center">
+              {places.map(place => (
+                <div key={place._id} className="max-w-xs overflow-hidden rounded-lg m-4 transform transition duration-300 hover:scale-105" onClick={() => goToDetailsPage(place._id)}>
+                  <img src={`data:image/jpeg;base64,${place.image}`} alt="Card Image" className="w-72 h-72 object-cover rounded-lg" />
+                  <div className="my-5"></div>
+                  <figcaption className="font-bold mt-2 text-center font-raleway">{place.placetitle}</figcaption>
+                  <p className="font-light text-center">{place.placelocation}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+
       <div className="my-5"></div>
       <Footer />
     </div>
