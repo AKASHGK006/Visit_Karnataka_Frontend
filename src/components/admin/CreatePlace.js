@@ -6,7 +6,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import baseUrl from '../../basrUrl';
 
 const CreatePlace = () => {
-  const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(null);
   const [placetitle, setPlacetitle] = useState('');
   const [placelocation, setPlacelocation] = useState('');
@@ -19,29 +18,19 @@ const CreatePlace = () => {
   const [maplink, setMaplink] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleFileChange = async (e) => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.type.startsWith('image/')) {
-        try {
-          const formData = new FormData();
-          formData.append('file', file);
-          formData.append('upload_preset', 'your_cloudinary_upload_preset'); // Replace with your upload preset
-
-          const response = await axios.post('https://api.cloudinary.com/v1_1/dfk634he8/image/upload', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
-
-          setImagePreview(response.data.secure_url); // Store the secure URL provided by Cloudinary
-          setError('');
-        } catch (error) {
-          setError('Failed to upload image. Please try again.');
-          console.error('Error uploading image to Cloudinary:', error);
-        }
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview(reader.result);
+        };
+        reader.readAsDataURL(file);
       } else {
+        // Display error message for invalid file type
         setError('Only images are allowed.');
       }
     }
@@ -52,49 +41,35 @@ const CreatePlace = () => {
     setDescription(data);
   };
 
-  const resetForm = () => {
-    setPlacetitle('');
-    setPlacelocation('');
-    setGuidename('');
-    setGuidemobile('');
-    setGuidelanguage('');
-    setResidentialdetails('');
-    setPolicestation('');
-    setFirestation('');
-    setMaplink('');
-    setDescription('');
-    setImagePreview(null);
-    setError('');
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const createplaceResponse = await axios.post(`${baseUrl}/Createplaces`, {
-        placetitle,
-        placelocation,
-        guidename,
-        guidemobile,
-        guidelanguage,
-        residentialdetails,
-        policestation,
-        firestation,
-        maplink,
-        description,
-        image: imagePreview // Use the image URL from Cloudinary
-      });
-
+      const image = imagePreview.replace(/^data:image\/[a-z]+;base64,/, '');
+      const createplaceResponse = await axios.post(`${baseUrl}/Createplaces`, { placetitle, placelocation, guidename, guidemobile, guidelanguage, residentialdetails, policestation, firestation, maplink, description, image });
+      console.log(createplaceResponse.data);
       if (createplaceResponse.data.status === "OK") {
-        resetForm();
+        // Reset form fields on successful submission
+        setPlacetitle('');
+        setPlacelocation('');
+        setGuidename('');
+        setGuidemobile('');
+        setGuidelanguage('');
+        setResidentialdetails('');
+        setPolicestation('');
+        setFirestation('');
+        setMaplink('');
+        setDescription('');
+
+        setImagePreview(null);
+        setError('');
         navigate("/Admin/Places");
       } else {
         setError('Failed. Please try again.');
       }
-    } catch (error) {
+    } catch (signupErr) {
       setError('An unexpected error occurred. Please try again later.');
-      console.error('Error creating place:', error);
     }
-  };
+  }
 
   return (
     <div className="flex-1 md:pl-72 md:pr-8">
@@ -102,6 +77,7 @@ const CreatePlace = () => {
         <h3 className="text-3xl font-semibold mb-6">Create Place</h3>
         {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md mb-4" role="alert">{error}</div>}
         <form encType="multipart/form-data" onSubmit={handleSubmit} >
+          <input type="hidden" name="s.no" />
           <div className="mb-4">
             <label htmlFor="place" className="block mb-2">Places Title</label>
             <input type="text" id="place" className="form-input w-full px-4 py-2 border rounded-md" name="place" value={placetitle} onChange={(e) => setPlacetitle(e.target.value)} required />
@@ -189,7 +165,7 @@ const CreatePlace = () => {
           </div>
           {imagePreview && (
             <div className="mb-4">
-              <img src={imagePreview} alt="Uploaded" className="w-64 h-auto" />
+              <img src={imagePreview} alt="Uploaded" className="max-w-full h-auto" />
             </div>
           )}
           <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 inline-block mb-4">Create</button>

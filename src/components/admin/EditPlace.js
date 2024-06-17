@@ -8,7 +8,6 @@ import baseUrl from '../../basrUrl';
 
 
 const UpdatePlace = () => {
-  const navigate = useNavigate();
   const { placeId } = useParams();
   const [image, setImage] = useState(null); // Store image data
   const [imagePreview, setImagePreview] = useState(null);
@@ -23,6 +22,7 @@ const UpdatePlace = () => {
   const [maplink, setMaplink] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPlaceDetails = async () => {
@@ -39,7 +39,8 @@ const UpdatePlace = () => {
         setFirestation(data.firestation);
         setMaplink(data.maplink);
         setDescription(data.description);
-        setImagePreview(`${baseUrl}/${data.image}`); // Set image preview
+        setImage(data.imageUrl); // Set image data
+        setImagePreview(data.imageUrl);
       } catch (error) {
         setError('Failed to fetch place details. Please try again.');
       }
@@ -51,7 +52,7 @@ const UpdatePlace = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(file);
+      setImage(file); // Set image data
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -63,30 +64,25 @@ const UpdatePlace = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formData = new FormData();
-      formData.append('placetitle', placetitle);
-      formData.append('placelocation', placelocation);
-      formData.append('guidename', guidename);
-      formData.append('guidemobile', guidemobile);
-      formData.append('guidelanguage', guidelanguage);
-      formData.append('residentialdetails', residentialdetails);
-      formData.append('policestation', policestation);
-      formData.append('firestation', firestation);
-      formData.append('maplink', maplink);
-      formData.append('description', description);
-      if (image) {
-        formData.append('image', image);
+      let imageData = imagePreview ? imagePreview.replace(/^data:image\/[a-z]+;base64,/, '') : null;
+      if (!imageData) {
+        // If there's no new image uploaded, set imageData to null
+        imageData = null;
       }
-
-      const updatePlaceResponse = await axios.put(`${baseUrl}/places/${placeId}`, formData, {
+      const updateData = { placetitle, placelocation, guidename, guidemobile, guidelanguage, residentialdetails, policestation, firestation, maplink, description };
+      if (imageData !== null) {
+        // If imageData is not null, add it to the updateData
+        updateData.image = imageData;
+      }
+      const updatePlaceResponse = await axios.put(`${baseUrl}/places/${placeId}`, updateData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         },
       });
       console.log(updatePlaceResponse.data);
       if (updatePlaceResponse.data.status === "OK") {
         setError('');
-        navigate("/admin/places");
+       navigate("/Admin/Places");
       } else {
         setError('Failed to update place. Please try again.');
       }
@@ -103,9 +99,14 @@ const UpdatePlace = () => {
   return (
     <div className="flex-1 md:pl-72 md:pr-8">
       <div className="container mx-auto mt-8 md:px-4 px-4">
-        <h3 className="text-3xl font-semibold mb-6">Create Place</h3>
-        {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md mb-4" role="alert">{error}</div>}
+        <h3 className="text-3xl font-semibold mb-6">Update Place</h3>
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md mb-4" role="alert">
+            {error}
+          </div>
+        )}
         <form encType="multipart/form-data" onSubmit={handleSubmit} >
+          <input type="hidden" name="s.no" />
           <div className="mb-4">
             <label htmlFor="place" className="block mb-2">Places Title</label>
             <input type="text" id="place" className="form-input w-full px-4 py-2 border rounded-md" name="place" value={placetitle} onChange={(e) => setPlacetitle(e.target.value)} required />
@@ -188,19 +189,17 @@ const UpdatePlace = () => {
               name="file"
               onChange={handleFileChange}
               accept="image/*" // Only accept image files
-              required
             />
           </div>
           {imagePreview && (
             <div className="mb-4">
-              <img src={imagePreview} alt="Uploaded" className="w-64 h-auto" />
+              <img src={imagePreview} alt="Uploaded" className="max-w-full h-auto" />
             </div>
           )}
           <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 inline-block mb-4">Update</button>
           <Link to={`/Admin/Places`} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-block">
             Cancel
-          </Link>
-        </form>
+          </Link>        </form>
       </div>
     </div>
   );
