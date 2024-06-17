@@ -5,7 +5,6 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import baseUrl from '../../basrUrl';
 
-
 const CreatePlace = () => {
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(null);
@@ -21,15 +20,27 @@ const CreatePlace = () => {
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreview(reader.result);
-        };
-        reader.readAsDataURL(file);
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', 'your_cloudinary_upload_preset'); // Replace with your upload preset
+
+          const response = await axios.post('https://api.cloudinary.com/v1_1/dfk634he8/image/upload', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+
+          setImagePreview(response.data.secure_url); // Store the secure URL provided by Cloudinary
+          setError('');
+        } catch (error) {
+          setError('Failed to upload image. Please try again.');
+          console.error('Error uploading image to Cloudinary:', error);
+        }
       } else {
         setError('Only images are allowed.');
       }
@@ -41,65 +52,48 @@ const CreatePlace = () => {
     setDescription(data);
   };
 
+  const resetForm = () => {
+    setPlacetitle('');
+    setPlacelocation('');
+    setGuidename('');
+    setGuidemobile('');
+    setGuidelanguage('');
+    setResidentialdetails('');
+    setPolicestation('');
+    setFirestation('');
+    setMaplink('');
+    setDescription('');
+    setImagePreview(null);
+    setError('');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formData = new FormData();
-      formData.append('placetitle', placetitle);
-      formData.append('placelocation', placelocation);
-      formData.append('guidename', guidename);
-      formData.append('guidemobile', guidemobile);
-      formData.append('guidelanguage', guidelanguage);
-      formData.append('residentialdetails', residentialdetails);
-      formData.append('policestation', policestation);
-      formData.append('firestation', firestation);
-      formData.append('maplink', maplink);
-      formData.append('description', description);
-
-      if (imagePreview) {
-        const imageFile = dataURItoBlob(imagePreview);
-        formData.append('image', imageFile, 'image.jpg');
-      }
-
-      const createplaceResponse = await axios.post(`${baseUrl}/Createplaces`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      const createplaceResponse = await axios.post(`${baseUrl}/Createplaces`, {
+        placetitle,
+        placelocation,
+        guidename,
+        guidemobile,
+        guidelanguage,
+        residentialdetails,
+        policestation,
+        firestation,
+        maplink,
+        description,
+        image: imagePreview // Use the image URL from Cloudinary
       });
 
       if (createplaceResponse.data.status === "OK") {
-        setPlacetitle('');
-        setPlacelocation('');
-        setGuidename('');
-        setGuidemobile('');
-        setGuidelanguage('');
-        setResidentialdetails('');
-        setPolicestation('');
-        setFirestation('');
-        setMaplink('');
-        setDescription('');
-        setImagePreview(null);
-        setError('');
-        navigate("/Admin/Places")
+        resetForm();
+        navigate("/Admin/Places");
       } else {
         setError('Failed. Please try again.');
       }
     } catch (error) {
       setError('An unexpected error occurred. Please try again later.');
+      console.error('Error creating place:', error);
     }
-  };
-
-  // Function to convert base64 string to Blob
-  const dataURItoBlob = (dataURI) => {
-    const byteString = atob(dataURI.split(',')[1]);
-    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    const blob = new Blob([ab], { type: mimeString });
-    return blob;
   };
 
   return (
