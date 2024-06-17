@@ -68,6 +68,7 @@ const Home = () => {
         <div className="container mx-auto px-4">
           {loading ? (
             <div className="flex items-center justify-center h-screen">
+              <div class="tenor-gif-embed" data-postid="17796441" data-share-method="host" data-aspect-ratio="1" data-width="100%"><a href="https://tenor.com/view/loading-buffering-buffer-load-circle-gif-17796441">Loading Buffering GIF</a>from <a href="https://tenor.com/search/loading-gifs">Loading GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
               <p className="text-xl">Loading...</p>
             </div>
           ) : (
