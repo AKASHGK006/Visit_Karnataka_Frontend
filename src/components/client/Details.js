@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import { useNavigate,Link } from 'react-router-dom';
 import baseUrl from '../../basrUrl';
+import Footer from './Footer'
 
 
 const Details = () => {
@@ -159,6 +160,7 @@ const Details = () => {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };
