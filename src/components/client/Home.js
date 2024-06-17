@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import bgImage from '../../assets/bg2.png'; // Adjust the relative path as needed
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import baseUrl from '../../basrUrl';
 import Footer from './Footer';
 
@@ -35,7 +35,8 @@ const Home = () => {
           <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-8" style={{ letterSpacing: '2px' }}>Visit Karnataka!</h1>
           <Link to="/#section2" className="bg-green-500 hover:bg-transparent text-white font-bold py-2 px-4 rounded-l-full rounded-r-full transition duration-300 border-2 border-white">
             Explore Now
-          </Link>        </div>
+          </Link>
+        </div>
       </div>
 
       <section id="section2">
@@ -76,7 +77,7 @@ const Home = () => {
         </div>
       </div>
       <div className="my-5"></div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

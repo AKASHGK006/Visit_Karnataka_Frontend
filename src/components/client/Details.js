@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import baseUrl from '../../basrUrl';
-import Footer from './Footer';
 
 
 const Details = () => {
@@ -161,7 +159,6 @@ const Details = () => {
           </div>
         </div>
       </div>
-      <Footer/>
     </div>
   );
 };
