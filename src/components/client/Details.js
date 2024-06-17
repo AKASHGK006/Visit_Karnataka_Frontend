@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import baseUrl from '../../basrUrl';
+import Navbar from './Navbar';
 
 
 const Details = () => {
@@ -160,6 +161,7 @@ const Details = () => {
           </div>
         </div>
       </div>
+      <Navbar/>
     </div>
   );
 };

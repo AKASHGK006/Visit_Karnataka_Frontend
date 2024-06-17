@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import baseUrl from '../../basrUrl';
 import { Link } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -75,8 +76,8 @@ const Home = () => {
           </div>
         </div>
       </div>
-
       <div className="my-5"></div>
+      <Navbar/>
     </div>
   );
 }
