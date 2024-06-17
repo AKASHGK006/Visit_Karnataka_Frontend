@@ -3,8 +3,7 @@ import bgImage from '../../assets/bg2.png'; // Adjust the relative path as neede
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import baseUrl from '../../basrUrl';
-import { Link } from 'react-router-dom';
-import Navbar from './Navbar';
+import Footer from './Footer';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -77,7 +76,7 @@ const Home = () => {
         </div>
       </div>
       <div className="my-5"></div>
-      <Navbar/>
+      <Footer/>
     </div>
   );
 }
