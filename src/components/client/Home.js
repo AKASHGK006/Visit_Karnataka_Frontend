@@ -69,7 +69,7 @@ const Home = () => {
           <div className="my-10"></div>
           {loading ? (
             <div className="flex justify-center">
-              <img src="https://th.bing.com/th/id/R.8fa41da1f4602b875dfe2ba5a3aff509?rik=CFhqLN6OVxIqkw&riu=http%3a%2f%2fclipart-library.com%2fimages%2f8cEbXkpLi.gif&ehk=dsjAdw1MsUpwICSCUvUW94MFeiU8yCijH1v2U6Dudig%3d&risl=&pid=ImgRaw&r=0" alt="Loading..." className="w-35 h-50" />
+              <img src="https://clipart-library.com/images/8cEbXkpLi.gif" alt="Loading..." className="w-35 h-50" />
             </div>
           ) : (
             <div className="flex flex-wrap justify-center">
