@@ -65,26 +65,26 @@ const Home = () => {
       <div className="my-10"></div>
 
       <div className="px-4">
-        <div className="container mx-auto px-4">
-          {loading ? (
-            <div className="flex items-center justify-center h-screen">
-              <div class="tenor-gif-embed" data-postid="17796441" data-share-method="host" data-aspect-ratio="1" data-width="100%"><a href="https://tenor.com/view/loading-buffering-buffer-load-circle-gif-17796441">Loading Buffering GIF</a>from <a href="https://tenor.com/search/loading-gifs">Loading GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
-              <p className="text-xl">Loading...</p>
-            </div>
-          ) : (
-            <div className="flex flex-wrap justify-center">
-              {places.map(place => (
-                <div key={place._id} className="max-w-xs overflow-hidden rounded-lg m-4 transform transition duration-300 hover:scale-105" onClick={() => goToDetailsPage(place._id)}>
-                  <img src={`data:image/jpeg;base64,${place.image}`} alt="Card Image" className="w-72 h-72 object-cover rounded-lg" />
-                  <div className="my-5"></div>
-                  <figcaption className="font-bold mt-2 text-center font-raleway">{place.placetitle}</figcaption>
-                  <p className="font-light text-center">{place.placelocation}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+      <div className="container mx-auto px-4">
+        <div className="my-10"></div>
+        {loading ? (
+          <div className="flex items-center justify-center h-screen">
+            <p className="text-xl">Loading...</p>
+          </div>
+        ) : (
+          <div className="flex flex-wrap justify-center">
+            {places.map(place => (
+              <div key={place._id} className="max-w-xs overflow-hidden rounded-lg m-4 transform transition duration-300 hover:scale-105" onClick={() => goToDetailsPage(place._id)}>
+                <img src={`data:image/jpeg;base64,${place.image}`} alt="Card Image" className="w-72 h-72 object-cover rounded-lg" />
+                <div className="my-5"></div>
+                <figcaption className="font-bold mt-2 text-center font-raleway">{place.placetitle}</figcaption>
+                <p className="font-light text-center">{place.placelocation}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+    </div>
 
       <div className="my-5"></div>
       <Footer />
