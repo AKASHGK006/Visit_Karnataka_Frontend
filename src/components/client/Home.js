@@ -65,26 +65,26 @@ const Home = () => {
       <div className="my-10"></div>
 
       <div className="px-4">
-      <div className="container mx-auto px-4">
-        <div className="my-10"></div>
-        {loading ? (
-          <div className="flex justify-center">
-            <p className="text-xl">Loading...</p>
-          </div>
-        ) : (
-          <div className="flex flex-wrap justify-center">
-            {places.map(place => (
-              <div key={place._id} className="max-w-xs overflow-hidden rounded-lg m-4 transform transition duration-300 hover:scale-105" onClick={() => goToDetailsPage(place._id)}>
-                <img src={`data:image/jpeg;base64,${place.image}`} alt="Card Image" className="w-72 h-72 object-cover rounded-lg" />
-                <div className="my-5"></div>
-                <figcaption className="font-bold mt-2 text-center font-raleway">{place.placetitle}</figcaption>
-                <p className="font-light text-center">{place.placelocation}</p>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="container mx-auto px-4">
+          <div className="my-10"></div>
+          {loading ? (
+            <div className="flex justify-center">
+              <img src="https://th.bing.com/th/id/R.8fa41da1f4602b875dfe2ba5a3aff509?rik=CFhqLN6OVxIqkw&riu=http%3a%2f%2fclipart-library.com%2fimages%2f8cEbXkpLi.gif&ehk=dsjAdw1MsUpwICSCUvUW94MFeiU8yCijH1v2U6Dudig%3d&risl=&pid=ImgRaw&r=0" alt="Loading..." className="w-35 h-50" />
+            </div>
+          ) : (
+            <div className="flex flex-wrap justify-center">
+              {places.map(place => (
+                <div key={place._id} className="max-w-xs overflow-hidden rounded-lg m-4 transform transition duration-300 hover:scale-105" onClick={() => goToDetailsPage(place._id)}>
+                  <img src={`data:image/jpeg;base64,${place.image}`} alt="Card Image" className="w-72 h-72 object-cover rounded-lg" />
+                  <div className="my-5"></div>
+                  <figcaption className="font-bold mt-2 text-center font-raleway">{place.placetitle}</figcaption>
+                  <p className="font-light text-center">{place.placelocation}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
 
       <div className="my-5"></div>
       <Footer />
