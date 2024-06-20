@@ -68,7 +68,7 @@ const Home = () => {
       <div className="container mx-auto px-4">
         <div className="my-10"></div>
         {loading ? (
-          <div className="flex items-center justify-center h-screen">
+          <div className="flex justify-center">
             <p className="text-xl">Loading...</p>
           </div>
         ) : (
