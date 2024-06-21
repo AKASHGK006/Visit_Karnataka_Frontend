@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 import baseUrl from '../../basrUrl';
-import Navbar from './Navbar';
+import Footer from './Footer';
 
 
 function Comment() {
@@ -104,7 +104,7 @@ function Comment() {
           </div>
         </form>
       )}
-      <Navbar/>
+      <Footer/>
     </div>
   );
 }
