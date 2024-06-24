@@ -77,6 +77,7 @@ function Comment() {
   }, []);
 
   return (
+    <div>
     <div className="wrapper mx-auto px-4 sm:px-6 lg:px-20 pt-20">
       {isLoggedIn && (
         <form className="form" onSubmit={handleSubmit}>
@@ -104,7 +105,8 @@ function Comment() {
           </div>
         </form>
       )}
-      <Footer/>
+    </div>
+    <Footer/>
     </div>
   );
 }

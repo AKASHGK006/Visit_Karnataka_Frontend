@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'; // Import Link from React Router
 import baseUrl from '../../basrUrl';
 
 const CreatePlace = () => {
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imageLink, setImageLink] = useState('');
   const [placetitle, setPlacetitle] = useState('');
   const [placelocation, setPlacelocation] = useState('');
   const [guidename, setGuidename] = useState('');
@@ -19,32 +19,31 @@ const CreatePlace = () => {
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreview(reader.result);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        // Display error message for invalid file type
-        setError('Only images are allowed.');
-      }
-    }
-  };
-
   const handleDescriptionChange = (event, editor) => {
     const data = editor.getData();
     setDescription(data);
   };
 
+  const handleImageLinkChange = (e) => {
+    setImageLink(e.target.value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const image = imagePreview.replace(/^data:image\/[a-z]+;base64,/, '');
-      const createplaceResponse = await axios.post(`${baseUrl}/Createplaces`, { placetitle, placelocation, guidename, guidemobile, guidelanguage, residentialdetails, policestation, firestation, maplink, description, image });
+      const createplaceResponse = await axios.post(`${baseUrl}/Createplaces`, {
+        placetitle,
+        placelocation,
+        guidename,
+        guidemobile,
+        guidelanguage,
+        residentialdetails,
+        policestation,
+        firestation,
+        maplink,
+        description,
+        image: imageLink, // Use imageLink instead of image data
+      });
       console.log(createplaceResponse.data);
       if (createplaceResponse.data.status === "OK") {
         // Reset form fields on successful submission
@@ -58,8 +57,7 @@ const CreatePlace = () => {
         setFirestation('');
         setMaplink('');
         setDescription('');
-
-        setImagePreview(null);
+        setImageLink('');
         setError('');
         // Redirect to '/Admin/Places'
         window.location.href = '/Admin/Places';
@@ -69,7 +67,8 @@ const CreatePlace = () => {
     } catch (signupErr) {
       setError('An unexpected error occurred. Please try again later.');
     }
-  }
+  };
+
 
   return (
     <div className="flex-1 md:pl-72 md:pr-8">
@@ -152,22 +151,17 @@ const CreatePlace = () => {
             </div>
           </div>
           <div className="mb-4">
-            <label htmlFor="file" className="block mb-2">Upload Image</label>
+            <label htmlFor="imageLink" className="block mb-2">Image Link</label>
             <input
-              type="file"
-              id="file"
+              type="text"
+              id="imageLink"
               className="form-input w-full px-4 py-2 border rounded-md"
-              name="file"
-              onChange={handleFileChange}
-              accept="image/*" // Only accept image files
+              name="imageLink"
+              value={imageLink}
+              onChange={handleImageLinkChange}
               required
             />
           </div>
-          {imagePreview && (
-            <div className="mb-4">
-              <img src={imagePreview} alt="Uploaded" className="max-w-full h-auto" />
-            </div>
-          )}
           <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 inline-block mb-4">Create</button>
           <Link to="/Admin/Places" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-block">Cancel</Link>
         </form>

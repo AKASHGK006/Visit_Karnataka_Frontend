@@ -75,7 +75,7 @@ const Home = () => {
             <div className="flex flex-wrap justify-center">
               {places.map(place => (
                 <div key={place._id} className="max-w-xs overflow-hidden rounded-lg m-4 transform transition duration-300 hover:scale-105" onClick={() => goToDetailsPage(place._id)}>
-                  <img src={`data:image/jpeg;base64,${place.image}`} alt="Card Image" className="w-72 h-72 object-cover rounded-lg" />
+                  <img src={place.image} alt="Card Image" className="w-72 h-72 object-cover rounded-lg" /> {/* Render image from place.image */}
                   <div className="my-5"></div>
                   <figcaption className="font-bold mt-2 text-center font-raleway">{place.placetitle}</figcaption>
                   <p className="font-light text-center">{place.placelocation}</p>

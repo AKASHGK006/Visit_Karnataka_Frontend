@@ -4,13 +4,11 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Link, useNavigate } from 'react-router-dom';
-import baseUrl from '../../basrUrl';
-
+import baseUrl from '../../basrUrl'; // Corrected import path assuming baseUrl is defined
 
 const UpdatePlace = () => {
   const { placeId } = useParams();
-  const [image, setImage] = useState(null); // Store image data
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imageLink, setImageLink] = useState(''); // State to store image link
   const [placetitle, setPlacetitle] = useState('');
   const [placelocation, setPlacelocation] = useState('');
   const [guidename, setGuidename] = useState('');
@@ -39,8 +37,7 @@ const UpdatePlace = () => {
         setFirestation(data.firestation);
         setMaplink(data.maplink);
         setDescription(data.description);
-        setImage(data.imageUrl); // Set image data
-        setImagePreview(data.imageUrl);
+        setImageLink(data.image); // Set image link state from fetched data
       } catch (error) {
         setError('Failed to fetch place details. Please try again.');
       }
@@ -49,40 +46,39 @@ const UpdatePlace = () => {
     fetchPlaceDetails();
   }, [placeId]);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file); // Set image data
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleImageLinkChange = (e) => {
+    setImageLink(e.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let imageData = imagePreview ? imagePreview.replace(/^data:image\/[a-z]+;base64,/, '') : null;
-      if (!imageData) {
-        // If there's no new image uploaded, set imageData to null
-        imageData = null;
-      }
-      const updateData = { placetitle, placelocation, guidename, guidemobile, guidelanguage, residentialdetails, policestation, firestation, maplink, description };
-      if (imageData !== null) {
-        // If imageData is not null, add it to the updateData
-        updateData.image = imageData;
-      }
-      const updatePlaceResponse = await axios.put(`${baseUrl}/places/${placeId}`, updateData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const updateData = {
+        placetitle,
+        placelocation,
+        guidename,
+        guidemobile,
+        guidelanguage,
+        residentialdetails,
+        policestation,
+        firestation,
+        maplink,
+        description,
+        image: imageLink, // Include imageLink in updateData
+      };
+      const updatePlaceResponse = await axios.put(
+        `${baseUrl}/places/${placeId}`,
+        updateData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       console.log(updatePlaceResponse.data);
-      if (updatePlaceResponse.data.status === "OK") {
+      if (updatePlaceResponse.data.status === 'OK') {
         setError('');
-       navigate("/Admin/Places");
+        navigate('/Admin/Places');
       } else {
         setError('Failed to update place. Please try again.');
       }
@@ -105,7 +101,7 @@ const UpdatePlace = () => {
             {error}
           </div>
         )}
-        <form encType="multipart/form-data" onSubmit={handleSubmit} >
+        <form onSubmit={handleSubmit} >
           <input type="hidden" name="s.no" />
           <div className="mb-4">
             <label htmlFor="place" className="block mb-2">Places Title</label>
@@ -181,25 +177,20 @@ const UpdatePlace = () => {
             </div>
           </div>
           <div className="mb-4">
-            <label htmlFor="file" className="block mb-2">Upload Image</label>
+            <label htmlFor="imageLink" className="block mb-2">Image Link</label>
             <input
-              type="file"
-              id="file"
+              type="text"
+              id="imageLink"
               className="form-input w-full px-4 py-2 border rounded-md"
-              name="file"
-              onChange={handleFileChange}
-              accept="image/*" // Only accept image files
+              name="imageLink"
+              value={imageLink}
+              onChange={handleImageLinkChange}
+              required
             />
           </div>
-          {imagePreview && (
-            <div className="mb-4">
-              <img src={imagePreview} alt="Uploaded" className="max-w-full h-auto" />
-            </div>
-          )}
           <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 inline-block mb-4">Update</button>
-          <Link to={`/Admin/Places`} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-block">
-            Cancel
-          </Link>        </form>
+          <Link to="/Admin/Places" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-block">Cancel</Link>
+        </form>
       </div>
     </div>
   );

@@ -65,7 +65,7 @@ const Details = () => {
       <h1 className="mb-3 text-4xl font-bold">{place.placetitle}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="col-span-1 md:col-span-1">
-          <img className="w-full rounded" src={`data:image/png;base64,${place.image}`} alt="" />
+          <img className="w-full rounded" src={place.image} alt="" />
         </div>
 
         <div className="col-span-1 md:col-span-1">
