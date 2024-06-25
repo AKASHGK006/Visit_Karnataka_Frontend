@@ -8,7 +8,7 @@ import baseUrl from '../../basrUrl'; // Corrected import path assuming baseUrl i
 
 const UpdatePlace = () => {
   const { placeId } = useParams();
-  const [imageLink, setImageLink] = useState(''); // State to store image link
+  const [imageLink, setImageLink] = useState('');
   const [placetitle, setPlacetitle] = useState('');
   const [placelocation, setPlacelocation] = useState('');
   const [guidename, setGuidename] = useState('');
@@ -19,6 +19,8 @@ const UpdatePlace = () => {
   const [firestation, setFirestation] = useState('');
   const [maplink, setMaplink] = useState('');
   const [description, setDescription] = useState('');
+  const [placeLatitude, setPlaceLatitude] = useState(''); // State for latitude
+  const [placeLongitude, setPlaceLongitude] = useState(''); // State for longitude
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -37,7 +39,9 @@ const UpdatePlace = () => {
         setFirestation(data.firestation);
         setMaplink(data.maplink);
         setDescription(data.description);
-        setImageLink(data.image); // Set image link state from fetched data
+        setImageLink(data.image);
+        setPlaceLatitude(data.latitude || ''); // Set latitude state from fetched data
+        setPlaceLongitude(data.longitude || ''); // Set longitude state from fetched data
       } catch (error) {
         setError('Failed to fetch place details. Please try again.');
       }
@@ -64,7 +68,9 @@ const UpdatePlace = () => {
         firestation,
         maplink,
         description,
-        image: imageLink, // Include imageLink in updateData
+        image: imageLink,
+        latitude: placeLatitude, // Include latitude in the updateData object
+        longitude: placeLongitude, // Include longitude in the updateData object
       };
       const updatePlaceResponse = await axios.put(
         `${baseUrl}/places/${placeId}`,
@@ -175,6 +181,30 @@ const UpdatePlace = () => {
                 required
               />
             </div>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="latitude" className="block mb-2">Latitude</label>
+            <input
+              type="text"
+              id="latitude"
+              className="form-input w-full px-4 py-2 border rounded-md"
+              name="latitude"
+              value={placeLatitude}
+              onChange={(e) => setPlaceLatitude(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="longitude" className="block mb-2">Longitude</label>
+            <input
+              type="text"
+              id="longitude"
+              className="form-input w-full px-4 py-2 border rounded-md"
+              name="longitude"
+              value={placeLongitude}
+              onChange={(e) => setPlaceLongitude(e.target.value)}
+              required
+            />
           </div>
           <div className="mb-4">
             <label htmlFor="imageLink" className="block mb-2">Image Link</label>

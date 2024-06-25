@@ -17,6 +17,8 @@ const CreatePlace = () => {
   const [firestation, setFirestation] = useState('');
   const [maplink, setMaplink] = useState('');
   const [description, setDescription] = useState('');
+  const [placeLatitude, setPlaceLatitude] = useState(''); // State for latitude
+  const [placeLongitude, setPlaceLongitude] = useState(''); // State for longitude
   const [error, setError] = useState('');
 
   const handleDescriptionChange = (event, editor) => {
@@ -42,7 +44,9 @@ const CreatePlace = () => {
         firestation,
         maplink,
         description,
-        image: imageLink, // Use imageLink instead of image data
+        image: imageLink,
+        latitude: placeLatitude, // Include latitude in the data
+        longitude: placeLongitude, // Include longitude in the data
       });
       console.log(createplaceResponse.data);
       if (createplaceResponse.data.status === "OK") {
@@ -58,6 +62,8 @@ const CreatePlace = () => {
         setMaplink('');
         setDescription('');
         setImageLink('');
+        setPlaceLatitude('');
+        setPlaceLongitude('');
         setError('');
         // Redirect to '/Admin/Places'
         window.location.href = '/Admin/Places';
@@ -68,7 +74,6 @@ const CreatePlace = () => {
       setError('An unexpected error occurred. Please try again later.');
     }
   };
-
 
   return (
     <div className="flex-1 md:pl-72 md:pr-8">
@@ -146,6 +151,30 @@ const CreatePlace = () => {
                 onChange={handleDescriptionChange}
                 className="text-white"
                 value={description}
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="latitude" className="block mb-2">Latitude</label>
+              <input
+                type="text"
+                id="latitude"
+                className="form-input w-full px-4 py-2 border rounded-md"
+                name="latitude"
+                value={placeLatitude}
+                onChange={(e) => setPlaceLatitude(e.target.value)}
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="longitude" className="block mb-2">Longitude</label>
+              <input
+                type="text"
+                id="longitude"
+                className="form-input w-full px-4 py-2 border rounded-md"
+                name="longitude"
+                value={placeLongitude}
+                onChange={(e) => setPlaceLongitude(e.target.value)}
                 required
               />
             </div>
