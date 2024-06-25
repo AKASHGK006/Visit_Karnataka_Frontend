@@ -1,2 +1,2 @@
-const baseUrl = `http://localhost:8080`;
+const baseUrl = `https://visit-karnataka-server.onrender.com`;
 export default baseUrl;
