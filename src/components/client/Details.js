@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { jwtDecode } from "jwt-decode";
-import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios'; // Import Axios
-import baseUrl from '../../basrUrl';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import baseUrl from '../../basrUrl'; // Make sure your baseUrl import is correct
 import Footer from './Footer';
 
-
 const Details = () => {
-  const navigate = useNavigate();
   const [place, setPlace] = useState(null);
-  const [weather, setWeather] = useState(null); // State for weather data
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track user login status
-  const [isLoading, setIsLoading] = useState(true); // State to track loading status
-  const { id } = useParams(); // Get the ID parameter from the URL
+  const [phone, setPhone] = useState('');
+  const [weather, setWeather] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    name: '',
+    feedback: '',
+  });
+  const { id } = useParams();
 
   useEffect(() => {
-    fetchPlaceDetails(id); // Fetch place details when component mounts
-    checkUserLoggedIn(); // Check user login status
+    fetchPlaceDetails(id);
   }, [id]);
 
   useEffect(() => {
-    // Fetch weather data when place details are loaded
     if (place) {
       fetchWeatherData(place.latitude, place.longitude);
     }
@@ -33,21 +32,20 @@ const Details = () => {
       if (response.ok) {
         const data = await response.json();
         setPlace(data);
-        // Store place name in session storage
-        sessionStorage.setItem('placeName', data.placetitle);
+        setIsLoading(false);
       } else {
         console.error('Failed to fetch place details');
+        setIsLoading(false);
       }
     } catch (error) {
       console.error('Error fetching place details:', error);
-    } finally {
       setIsLoading(false);
     }
   };
 
-  const fetchWeatherData = async () => {
+  const fetchWeatherData = async (latitude, longitude) => {
     const apiKey = 'cb932829eacb6a0e9ee4f38bfbf112ed';
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${place.latitude}&lon=${place.longitude}&appid=${apiKey}&units=metric`;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
 
     try {
       const response = await axios.get(apiUrl);
@@ -61,18 +59,72 @@ const Details = () => {
     }
   };
 
-  const checkUserLoggedIn = () => {
-    const token = sessionStorage.getItem('token');
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-      if (decodedToken.exp < currentTime) {
-        setIsLoggedIn(false);
+  const openModal = () => {
+    const modal = document.getElementById('crud-modal');
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+  };
+
+  const closeModal = () => {
+    const modal = document.getElementById('crud-modal');
+    modal.classList.add('hidden');
+    modal.setAttribute('aria-hidden', 'true');
+    // Reset form fields when modal is closed
+    setFormData({
+      name: '',
+      feedback: '',
+    });
+    setPhone('');
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const feedbackData = {
+      name: formData.name,
+      feedback: formData.feedback,
+      phone: phone,
+      place: place?.placetitle, // Include place name in feedback data
+    };
+
+    try {
+      await submitFeedback(feedbackData);
+      closeModal();
+      // Reset form fields after successful submission
+      setFormData({
+        name: '',
+        feedback: '',
+      });
+      setPhone('');
+      // Optionally, reset phone state and other UI updates if needed
+      Swal.fire({
+        icon: 'success',
+        title: 'Feedback Submitted!',
+        text: 'Thank you for your feedback.',
+      });
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      // Handle error scenario
+      Swal.fire({
+        icon: 'error',
+        title: 'Submission Failed',
+        text: 'Failed to submit your feedback. Please try again later.',
+      });
+    }
+  };
+
+  const submitFeedback = async (feedbackData) => {
+    try {
+      const response = await axios.post(`${baseUrl}/feedback`, feedbackData);
+      if (response.status === 200) {
+        console.log('Feedback submitted successfully');
+        // Handle success scenario if needed
       } else {
-        setIsLoggedIn(true);
+        console.error('Failed to submit feedback');
+        throw new Error('Failed to submit feedback');
       }
-    } else {
-      setIsLoggedIn(false);
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      throw error; // Rethrow error to handle it in the calling function
     }
   };
 
@@ -168,6 +220,7 @@ const Details = () => {
               <p className="mt-2">{place.firestation}</p>
               <div className="mt-5"></div>
             </div>
+
             {weather && (
               <div className="col-span-1 md:col-span-1">
                 <h3 className="text-xl font-bold flex items-center">
@@ -197,16 +250,139 @@ const Details = () => {
               <p className="mt-1">Mobile - {place.guidemobile} </p>
               <p className="mt-1">Language - {place.guidelanguage} </p>
             </div>
+
             <div className="flex">
-              <Link to={`/comment`} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-6 inline-block mr-4">
-                Comment
-              </Link>
+              <button
+                onClick={openModal}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block mr-4 mt-5"
+                type="button"
+                data-modal-target="crud-modal"
+                data-modal-toggle="crud-modal"
+              >
+                Feedback
+              </button>
             </div>
             <div className="mt-4"></div>
           </div>
         </div>
       </div>
       <Footer />
+      {/* Modal */}
+      <div
+        id="crud-modal"
+        className="hidden fixed inset-0 z-50 flex justify-center items-center overflow-y-auto"
+        tabIndex="-1"
+        aria-hidden="true"
+      >
+        <div className="relative p-4 w-full max-w-md max-h-full">
+          <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Give Feedback
+              </h3>
+              <button
+                type="button"
+                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                onClick={closeModal}
+                data-modal-toggle="crud-modal"
+              >
+                <svg
+                  className="w-3 h-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 14"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                  />
+                </svg>
+                <span className="sr-only">Close modal</span>
+              </button>
+            </div>
+            <form className="p-4 md:p-5" onSubmit={handleSubmit}>
+              <div className="grid gap-4 mb-4 grid-cols-2">
+                <div className="col-span-2">
+                  <label
+                    htmlFor="name"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    placeholder="Type Your name."
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label
+                    htmlFor="phone"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    id="phone"
+                    value={phone}
+                    onChange={(e) => {
+                      const enteredValue = e.target.value;
+                      const numericValue = enteredValue.replace(/\D/g, '');
+                      const limitedValue = numericValue.slice(0, 10);
+                      const validValue = /^(6|7|8|9)/.test(limitedValue)
+                        ? limitedValue
+                        : '';
+                      setPhone(validValue);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    placeholder="Type Phone Number here."
+                    required
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label
+                    htmlFor="feedback"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Feedback
+                  </label>
+                  <textarea
+                    id="feedback"
+                    name="feedback"
+                    rows="4"
+                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Write Place Feedback here."
+                    value={formData.feedback}
+                    onChange={(e) =>
+                      setFormData({ ...formData, feedback: e.target.value })
+                    }
+                    required
+                  ></textarea>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block mr-4"
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
