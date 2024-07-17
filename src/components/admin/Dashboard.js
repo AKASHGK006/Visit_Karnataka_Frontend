@@ -5,9 +5,9 @@ import baseUrl from '../../basrUrl';
 const Dashboard = () => {
   const [places, setPlaces] = useState(0);
   const [feedback, setFeedback] = useState(0);
+  const [bookings, setBookings] = useState(0);
 
   useEffect(() => {
-
     // Fetch places count
     axios.get(`${baseUrl}/places`)
       .then(response => {
@@ -24,6 +24,15 @@ const Dashboard = () => {
       })
       .catch(error => {
         console.error('Error fetching feedback:', error);
+      });
+
+    // Fetch bookings count
+    axios.get(`${baseUrl}/bookings`)
+      .then(response => {
+        setBookings(response.data.length); // Assuming bookings data is an array and length represents the count
+      })
+      .catch(error => {
+        console.error('Error fetching bookings:', error);
       });
   }, []); // Empty dependency array to run only once on component mount
 
@@ -47,6 +56,11 @@ const Dashboard = () => {
             <h2 className="text-xl font-semibold mb-4">Feedback</h2>
             <p className="text-4xl font-bold">{feedback}</p>
           </div>
+          {/* Booking Card */}
+          <div className="bg-yellow-200 shadow-md rounded-md p-6 text-gray-800">
+            <h2 className="text-xl font-semibold mb-4">Bookings</h2>
+            <p className="text-4xl font-bold">{bookings}</p>
+          </div>
         </div>
 
         {/* Google Maps iframe */}
@@ -59,7 +73,6 @@ const Dashboard = () => {
             referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
-
       </div>
     </div>
   );
