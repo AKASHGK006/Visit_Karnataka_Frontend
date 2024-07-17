@@ -17,8 +17,7 @@ const Booking = () => {
   const [place, setPlace] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
-
-  const pricePerAdult = 500;
+  const [pricePerAdult, setPricePerAdult] = useState(0); // Initialize price per adult state
 
   useEffect(() => {
     fetchPlaceDetails(id);
@@ -29,6 +28,7 @@ const Booking = () => {
       const response = await axios.get(`${baseUrl}/places/${placeId}`);
       if (response.status === 200) {
         setPlace(response.data);
+        setPricePerAdult(response.data.placeprice);
         setIsLoading(false);
       } else {
         console.error('Failed to fetch place details');
@@ -122,7 +122,7 @@ const Booking = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                 </svg>
                 <span className="text-sm md:text-lg font-semibold">
-                  <a href="www.google.com" className="underline">Meet at New York, NY 10017, USA</a>
+                  <a href={place.placemeetlocation} target="_blank" rel="noopener noreferrer" className="underline">Meet the guide near {place.placetitle} (Click me)</a>
                 </span>
               </p>
               <hr className="my-4 border-gray-300" />
@@ -242,8 +242,8 @@ const Booking = () => {
                         <select value={language} onChange={handleLanguageChange} class="appearance-none border border-none bg-transparent focus:outline-none text-lg block w-full pl-2">
                           <option value="" disabled selected hidden>Select language</option>
                           <option value="English">English</option>
-                          <option value="French">French</option>
-                          <option value="German">German</option>
+                          <option value="Hindi">Hindi</option>
+                          <option value="Kannada">Kannada</option>
                         </select>
 
                       </div>

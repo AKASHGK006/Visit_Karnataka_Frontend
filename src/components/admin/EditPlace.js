@@ -11,6 +11,8 @@ const UpdatePlace = () => {
   const [imageLink, setImageLink] = useState('');
   const [placetitle, setPlacetitle] = useState('');
   const [placelocation, setPlacelocation] = useState('');
+  const [placemeetlocation, setPlacemeetlocation] = useState('');
+  const [placeprice, setPlaceprice] = useState('');
   const [guidename, setGuidename] = useState('');
   const [guidemobile, setGuidemobile] = useState('');
   const [guidelanguage, setGuidelanguage] = useState('');
@@ -31,6 +33,8 @@ const UpdatePlace = () => {
         const { data } = response;
         setPlacetitle(data.placetitle);
         setPlacelocation(data.placelocation);
+        setPlacemeetlocation(data.placemeetlocation);
+        setPlaceprice(data.placeprice);
         setGuidename(data.guidename);
         setGuidemobile(data.guidemobile);
         setGuidelanguage(data.guidelanguage);
@@ -60,6 +64,8 @@ const UpdatePlace = () => {
       const updateData = {
         placetitle,
         placelocation,
+        placemeetlocation,
+        placeprice,
         guidename,
         guidemobile,
         guidelanguage,
@@ -116,6 +122,14 @@ const UpdatePlace = () => {
           <div className="mb-4">
             <label htmlFor="location" className="block mb-2">Places Location</label>
             <input type="text" id="location" className="form-input w-full px-4 py-2 border rounded-md" name="location" value={placelocation} onChange={(e) => setPlacelocation(e.target.value)} required />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="meetlocation" className="block mb-2">Places Meet Location</label>
+            <input type="text" id="meetlocation" className="form-input w-full px-4 py-2 border rounded-md" name="meetlocation" value={placemeetlocation} onChange={(e) => setPlacemeetlocation(e.target.value)} required />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="price" className="block mb-2">Places price</label>
+            <input type="number" id="price" className="form-input w-full px-4 py-2 border rounded-md" name="price" value={placeprice} onChange={(e) => setPlaceprice(e.target.value)} required />
           </div>
           <div className="mb-4">
             <label htmlFor="guidename" className="block mb-2">Guide Name</label>
