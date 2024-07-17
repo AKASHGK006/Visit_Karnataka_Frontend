@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import baseUrl from '../../basrUrl'; // Ensure this import is correct
+import baseUrl from '../../basrUrl';
 
 const Booking = () => {
   const navigate = useNavigate();
@@ -18,6 +18,14 @@ const Booking = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const [pricePerAdult, setPricePerAdult] = useState(0); // Initialize price per adult state
+  const handleIncreaseParticipants = () => {
+    setParticipants((prevParticipants) => Math.min(30, prevParticipants + 1));
+  };
+
+  const handleDecreaseParticipants = () => {
+    setParticipants((prevParticipants) => Math.max(1, prevParticipants - 1));
+  };
+
 
   useEffect(() => {
     fetchPlaceDetails(id);
@@ -177,18 +185,26 @@ const Booking = () => {
                       />
                     </svg>
                     <p className="flex-1 mr-4 text-lg">Participants</p>
-                    <button type="button" className="bg-white text-gray-700 rounded-full w-3.5 h-3.5 flex items-center justify-center" onClick={() => setParticipants(Math.max(1, participants - 1))}>
+                    <button
+                      type="button"
+                      className="bg-white text-gray-700 rounded-full w-3.5 h-3.5 flex items-center justify-center"
+                      onClick={handleDecreaseParticipants}
+                    >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4" />
                       </svg>
                     </button>
                     <span className="mx-4">{participants}</span>
-                    <button type="button" className="bg-white text-gray-700 rounded-full w-3.5 h-3.5 flex items-center justify-center"
-                      onClick={() => setParticipants(participants + 1)}>
+                    <button
+                      type="button"
+                      className="bg-white text-gray-700 rounded-full w-3.5 h-3.5 flex items-center justify-center"
+                      onClick={handleIncreaseParticipants}
+                    >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                       </svg>
                     </button>
+
                   </div>
                 </div>
 
