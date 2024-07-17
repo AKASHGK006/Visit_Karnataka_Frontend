@@ -72,7 +72,7 @@ const Home = () => {
               <img src="https://clipart-library.com/images/8cEbXkpLi.gif" alt="Loading..." className="w-35 h-50" />
             </div>
           ) : (
-            <div className="flex flex-wrap justify-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 justify-items-center">
               {places.map(place => (
                 <div key={place._id} className="max-w-xs overflow-hidden rounded-lg m-4 transform transition duration-300 hover:scale-105" onClick={() => goToDetailsPage(place._id)}>
                   <img src={place.image} alt="Card Image" className="w-80 h-80 object-cover rounded-lg" /> {/* Render image from place.image */}
