@@ -242,17 +242,6 @@ const Details = () => {
                 <div className="mt-5"></div>
               </div>
             )}
-            <div className="col-span-1 md:col-span-1">
-              <h3 className="text-xl font-bold flex items-center">
-                <span>Guide Details</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 ml-2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0-3.75-3.75M17.25 21 21 17.25" />
-                </svg>
-              </h3>
-              <p className="mt-2">Name - {place.guidename} </p>
-              <p className="mt-1">Mobile - {place.guidemobile} </p>
-              <p className="mt-1">Language - {place.guidelanguage} </p>
-            </div>
             <div className="flex">
               <button
                 onClick={openModal}
