@@ -28,8 +28,6 @@ function Navbar() {
     <>
       <li><Link to="/">Home</Link></li>
       <li><a href="/#section2">Places</a></li>
-      <li><Link to="/Login">Login</Link></li>
-      <li><a href="#section3">About US</a></li>
       <li><a href="#section3">Contact US</a></li>
     </>
   );
