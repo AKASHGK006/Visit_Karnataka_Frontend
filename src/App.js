@@ -13,6 +13,9 @@ import Places from './components/admin/Places';
 import Feedback from './components/admin/Feedback';
 import CreatePlace from './components/admin/CreatePlace';
 import EditPlace from './components/admin/EditPlace';
+import Booking from './components/client/Booking'
+import Bookings from './components/admin/Booking'
+
 
 function App() {
   return (
@@ -35,6 +38,7 @@ function ClientRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/comment" element={<Comment />} />
+        <Route path="/booking/:id" element={<Booking />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </>
@@ -66,6 +70,7 @@ function AdminRoutes() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/places" element={<Places />} />
         <Route path="/feedback" element={<Feedback />} />
+        <Route path="/bookings" element={<Bookings />} />
         <Route path="/createplace" element={<CreatePlace />} />
         <Route path="/editplace/:placeId" element={<EditPlace />} />
         <Route path="*" element={<Error />} />

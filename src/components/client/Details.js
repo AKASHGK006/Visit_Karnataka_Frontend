@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import baseUrl from '../../basrUrl'; // Make sure your baseUrl import is correct
 import Footer from './Footer';
 
 const Details = () => {
+  const navigate = useNavigate();
   const [place, setPlace] = useState(null);
   const [phone, setPhone] = useState('');
   const [weather, setWeather] = useState(null);
@@ -136,6 +137,9 @@ const Details = () => {
     return <div>Failed to load place details.</div>;
   }
 
+  const goToBookingPage = (placeId) => {
+    navigate(`/Booking/${placeId}`);
+  };
   return (
     <div>
       <div className="container mx-auto px-4 pt-20">
@@ -238,7 +242,6 @@ const Details = () => {
                 <div className="mt-5"></div>
               </div>
             )}
-
             <div className="col-span-1 md:col-span-1">
               <h3 className="text-xl font-bold flex items-center">
                 <span>Guide Details</span>
@@ -250,7 +253,6 @@ const Details = () => {
               <p className="mt-1">Mobile - {place.guidemobile} </p>
               <p className="mt-1">Language - {place.guidelanguage} </p>
             </div>
-
             <div className="flex">
               <button
                 onClick={openModal}
@@ -261,22 +263,29 @@ const Details = () => {
               >
                 Feedback
               </button>
+              <button
+                onClick={() => goToBookingPage(place._id)}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block mr-4 mt-5"
+              >
+                Book Guide
+              </button>
             </div>
             <div className="mt-4"></div>
           </div>
         </div>
       </div>
       <Footer />
+
       {/* Modal */}
       <div
         id="crud-modal"
-        className="hidden fixed inset-0 z-50 flex justify-center items-center overflow-y-auto"
+        className="hidden fixed inset-0 z-50 flex justify-center items-center"
         tabIndex="-1"
         aria-hidden="true"
       >
         <div className="relative p-4 w-full max-w-md max-h-full">
-          <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+          <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 overflow-y-auto border-4 border-white">
+            <div className="flex items-center justify-between p-4 md:p-5 border-b-4 rounded-t dark:border-white">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Give Feedback
               </h3>
