@@ -239,7 +239,6 @@ const Details = () => {
                 </h3>
                 <p className="mt-1">Temperature: {weather.main.temp}°C</p>
                 <p className="mt-1">Description: {weather.weather[0].description}</p>
-                <div className="mt-5"></div>
               </div>
             )}
             <div className="flex">

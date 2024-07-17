@@ -24,11 +24,32 @@ function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []); // Empty dependency array to run once on mount
 
+  const navItems = (
+    <>
+      <li><Link to="/">HOME</Link></li>
+      <li><a href="/#section2">PLACES</a></li>
+      <li><a href="#section3">CONTACT</a></li>
+    </>
+  );
+
   return (
     <>
       <div className="navbar bg-neutral text-neutral-content md:py-2 md:px-20 sm:py-2 sm:px-4 fixed w-full z-50">
         <div className="navbar-start">
-          <Link to="/" className="text-2xl font-bold cursor-pointer pl-2">{visitText}</Link>
+          <div className="dropdown">
+            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-5 h-5 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </div>
+            <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+              {navItems}
+            </ul>
+          </div>
+          <Link to="/" className="text-2xl font-bold cursor-pointer">{visitText}</Link>
+        </div>
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal px-1">
+            {navItems}
+          </ul>
         </div>
         <div className="navbar-end flex space-x-2">
           <button className="btn btn-ghost btn-circle">

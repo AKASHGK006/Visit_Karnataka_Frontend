@@ -75,7 +75,7 @@ const Home = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 justify-items-center">
               {places.map(place => (
                 <div key={place._id} className="max-w-xs overflow-hidden rounded-lg m-4 transform transition duration-300 hover:scale-105" onClick={() => goToDetailsPage(place._id)}>
-                  <img src={place.image} alt="Card Image" className="w-80 h-80 object-cover rounded-lg" /> {/* Render image from place.image */}
+                  <img src={place.image} alt="Card Image" className="w-96 h-60 object-cover rounded-lg" /> {/* Render image from place.image */}
                   <div className="my-5"></div>
                   <figcaption className="font-bold mt-2 text-center font-raleway">{place.placetitle}</figcaption>
                   <p className="font-light text-center">{place.placelocation}</p>

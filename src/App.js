@@ -5,7 +5,6 @@ import Sidebar from './components/admin/Sidebar';
 import Home from './components/client/Home';
 import Details from './components/client/Details';
 import Error from './components/client/Error';
-import Comment from './components/client/Comment';
 import Login from './components/client/Login';
 import SignUp from './components/client/Signup';
 import Dashboard from './components/admin/Dashboard';
@@ -37,7 +36,6 @@ function ClientRoutes() {
         <Route path="/details/:id" element={<Details />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/comment" element={<Comment />} />
         <Route path="/booking/:id" element={<Booking />} />
         <Route path="*" element={<Error />} />
       </Routes>
