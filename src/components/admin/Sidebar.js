@@ -63,7 +63,7 @@ const Sidebar = () => {
                   <Link to="/admin/places" className="block" onClick={closeOtherMenus}>Places</Link>
                 </li>
                 <li className="py-2">
-                  <Link to="/admin/feedback" className="block" onClick={closeOtherMenus}>Feedback</Link>
+                  <Link to="/admin/feedback" className="block" onClick={closeOtherMenus}>Feedbacks</Link>
                 </li>
                 <li className="py-2">
                   <Link to="/admin/bookings" className="block" onClick={closeOtherMenus}>Bookings</Link>
