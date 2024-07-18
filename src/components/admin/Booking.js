@@ -70,7 +70,7 @@ const Booking = () => {
                 <tr className="bg-gray-800">
                   <th className="px-4 py-2 border border-gray-400">S.no</th>
                   <th className="px-4 py-2 border border-gray-400">Name</th>
-                  <th className="px-4 py-2 border border-gray-400">Phone Number</th>
+                  <th className="px-4 py-2 border border-gray-400">Phone No.</th>
                   <th className="px-4 py-2 border border-gray-400">Place</th>
                   <th className="px-4 py-2 border border-gray-400">Participants</th>
                   <th className="px-4 py-2 border border-gray-400">Date</th>
