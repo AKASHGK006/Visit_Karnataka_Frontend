@@ -49,7 +49,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
       <div className="w-full max-w-md bg-white rounded-lg shadow dark:border dark:border-gray-700 dark:bg-gray-800 p-6 sm:px-8 py-8 sm:py-12 px-4 md:px-6">
         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white mb-6">
-          Sign in to your account
+          Sign in to Admin panel
         </h1>
         {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md mb-4" role="alert">{error}</div>}
         <form className="space-y-4" onSubmit={handleSubmit}>
