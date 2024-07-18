@@ -232,7 +232,7 @@ const Details = () => {
                   {weather.weather && weather.weather.length > 0 && (
                     <img
                       className="h-9 w-9"
-                      src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
+                      src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
                       alt="Weather Icon"
                     />
                   )}
