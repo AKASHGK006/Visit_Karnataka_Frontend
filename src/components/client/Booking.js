@@ -65,7 +65,7 @@ const Booking = () => {
 
     try {
       const response = await axios.post(`${baseUrl}/bookings`, bookingData);
-      console.log('Booking successful:', response.data);
+      console.log('Booking successful:');
       // Optionally reset form fields or show success message
       Swal.fire({
         icon: 'success',
