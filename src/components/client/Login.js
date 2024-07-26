@@ -15,16 +15,13 @@ const Login = () => {
     try {
       const response = await axios.post(`${baseUrl}/Login`, { phone, password });
       if (response.data.Status === "Success") {
-        // Save token, role, name, and phone to sessionStorage
-        sessionStorage.setItem('token', response.data.token);
+        // Save user data to sessionStorage
         sessionStorage.setItem('role', response.data.role);
-        sessionStorage.setItem('name', response.data.name);
-        sessionStorage.setItem('phone', response.data.phone);
-
+  
         setPhone('');
         setPassword('');
         setError('');
-
+  
         // Redirect based on user role
         if (response.data.role === "Admin") {
           navigate("/Admin/"); // Redirect to admin dashboard
@@ -42,7 +39,7 @@ const Login = () => {
         setError('An unexpected error occurred. Please try again later.');
       }
     }
-  }; 
+  };  
 
   
   return (
