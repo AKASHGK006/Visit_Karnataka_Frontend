@@ -35,7 +35,7 @@ function ClientRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/details/:id" element={<Details />} />
         <Route path="/login" element={<Login />} />
-        {/*<Route path="/signup" element={<SignUp />} />*/}
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/booking/:id" element={<Booking />} />
         <Route path="*" element={<Error />} />
       </Routes>
