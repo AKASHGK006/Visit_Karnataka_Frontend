@@ -23,7 +23,7 @@ const Login = () => {
         setError('');
   
         // Redirect based on user role
-        if (response.data.role === "Admin") {
+        if (response.data.role === "User") {
           navigate("/Admin/"); // Redirect to admin dashboard
         } else {
           navigate("/Comment"); // Redirect to user dashboard
