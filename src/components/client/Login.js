@@ -33,7 +33,7 @@ const Login = () => {
           navigate("/Comment"); // User panel
         }
       } else {
-        setError('User does not exist... ');
+        setError('User does not exist...');
       }
     } catch (err) {
       if (err.response) {
