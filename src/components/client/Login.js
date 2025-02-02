@@ -19,7 +19,7 @@ const Login = () => {
 
       console.log("Server Response:", response.data); // Debugging
 
-      if (response.data.Status === "Success") {
+      if (response.data.status === "Success") {
         sessionStorage.setItem('role', response.data.role);
 
         setPhone('');
@@ -33,7 +33,7 @@ const Login = () => {
           navigate("/Comment"); // User panel
         }
       } else {
-        setError('User does not exist ');
+        setError('User does not exist... ');
       }
     } catch (err) {
       if (err.response) {
